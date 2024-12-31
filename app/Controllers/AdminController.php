@@ -15,46 +15,47 @@ class AdminController extends BaseController
     {
         $this->user = new AdminModel();
         $this->campaign = new CampaignModel();
-        
     }
 
     public function index()
     {
         $session = session();
+
         if (!$session->get('isLoggedIn')) {
             return redirect()->to('/login');
         }
-
+        
         $data['users'] = $this->user->paginate(10);
         $data['pager'] = $this->user->pager; // Add pagination links
-
-        // $sql = "SELECT product.name AS product_name, category.name AS category_name FROM product JOIN category ON product.category_id=category.id";
-
-        // mysqli_query($sql);
+        
+        session()->remove('filterParams');
 
         return view('admin/index', $data);
     }
 
-    
-
     public function filter()
     {
-        // Handle filtering functionality
-        $filterParams = array();
-        $filterParams['name'] = $this->request->getPost('name');
-        $filterParams['phone'] = $this->request->getPost('phone');
-        $filterParams['dob'] = $this->request->getPost('dob');
-        $filterParams['role'] = $this->request->getPost('category');
-    
+        $session = session();
+      
+        // Store filter parameters in session
+        $filterParams = [
+            'name' => $this->request->getPost('name'),
+            'phone' => $this->request->getPost('phone'),
+            'dob' => $this->request->getPost('dob'),
+            'role' => $this->request->getPost('category'),
+        ];
+        
+        $session->set('filterParams', $filterParams);
+
         // Default to all users
         $query = $this->user;
-    
+
         if (!empty($filterParams)) {
             if ($filterParams['name']) {
-                $query = $query->where('name', $filterParams['name']);
+                $query = $query->like('name', $filterParams['name']);
             }
             if ($filterParams['phone']) {
-                $query = $query->where('phone', $filterParams['phone']);
+                $query = $query->like('phone', $filterParams['phone']);
             }
             if ($filterParams['dob']) {
                 // Convert the date from 'YYYY-MM-DD' to 'd/m/Y' format
@@ -67,12 +68,11 @@ class AdminController extends BaseController
                 $query = $query->where('role', $filterParams['role']);
             }
         }
-    
+
         $data['users'] = $query->paginate(10); // Apply pagination to the filtered results
         $data['pager'] = $this->user->pager; // Add pagination links
         return view('admin/index', $data);
     }
-
 
     public function addData()
     {
@@ -93,24 +93,11 @@ class AdminController extends BaseController
             'role' => 'required'
         ]);
 
-        if (!$this->validate($validation->getRules())) {
-            log_message('debug', 'Validation errors: ' . json_encode($this->validator->getErrors()));
-            return redirect()->to('/admin/index')->withInput()->with('errors', $this->validator->getErrors());
-        }
-
-        // Convert DOB to yyyy-mm-dd format
-        $dob = \DateTime::createFromFormat('d/m/Y', $this->request->getPost('dob'));
-        if ($dob) {
-            $dobFormatted = $dob->format('d/m/Y');
-        } else {
-            return redirect()->to('/admin')->withInput()->with('errors', ['dob' => 'The dob field must contain a valid date.']);
-        }
-
         // Insert data into the database
         $this->user->insert([
             'name' => $this->request->getPost('name'),
             'phone' => $this->request->getPost('phone'),
-            'dob' => $dobFormatted,
+            'dob' => $this->request->getPost('dob'),
             'role' => $this->request->getPost('role'),
         ]);
 
@@ -152,7 +139,6 @@ class AdminController extends BaseController
         ]);
 
         if (!$this->validate($validation->getRules())) {
-            log_message('debug', 'Validation errors: ' . json_encode($this->validator->getErrors()));
             return redirect()->to('/admin/index')->withInput()->with('errors', $this->validator->getErrors());
         }
 

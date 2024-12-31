@@ -24,9 +24,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4>Users Data
-
                         <a href="#" data-bs-toggle="modal" data-bs-target="#filterModal" class="btn btn-primary float-end">FILTER</a>
-
                         <a href="#" data-bs-toggle="modal" data-bs-target="#addUserModal" class="btn btn-primary float-end me-2">Add Data</a>
                     </h4>
                 </div>
@@ -94,7 +92,7 @@
                                 </div>
                                 <div class="form-group mb-2">
                                     <label>DOB :</label>
-                        <input type="date" class="form-control" name="dob" id="dob" placeholder="DD/MM/YYYY">
+                                    <input type="date" class="form-control" name="dob" id="dob" placeholder="DD/MM/YYYY">
                                 </div>
                                 <div class="form-group">
                                     <label for="role">Role :</label>
@@ -165,41 +163,37 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-
-
                 <form action="/admin/filter" method="post">
                     <?= csrf_field() ?>
                     <div class="mb-3">
-                        <label for="title" class="form-label">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter name">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="<?= session()->get('filterParams')['name'] ?? '' ?>" placeholder="Enter name">
                     </div>
                     <div class="mb-3">
                         <label for="phone" class="form-label">Phone :</label>
-                        <input type="text" class="form-control" name="phone" id="phone" placeholder="Enter phone">
+                        <input type="text" class="form-control" name="phone" id="phone" value="<?= session()->get('filterParams')['phone'] ?? '' ?>" placeholder="Enter phone">
                     </div>
                     <div class="mb-3">
                         <label for="dob" class="form-label">DOB :</label>
-                        <input type="date" class="form-control" name="dob" id="dob" placeholder="DD/MM/YYYY">
+                        <input type="date" class="form-control" name="dob" id="dob" value="<?= session()->get('filterParams')['dob'] ?? '' ?>" placeholder="DD/MM/YYYY">
                     </div>
                     <div class="mb-3">
                         <label for="category" class="form-label">Role</label>
                         <select class="form-select" id="category" name="category">
                             <option value="">Select an option</option>
-                            <option value="Admin">Admin</option>
-                            <option value="Supervisor">Supervisor</option>
-                            <option value="Teamleader">Teamleader</option>
-                            <option value="Agent">Agent</option>
+                            <option value="Admin" <?= (session()->get('filterParams')['role'] ?? '') === 'Admin' ? 'selected' : '' ?>>Admin</option>
+                            <option value="Supervisor" <?= (session()->get('filterParams')['role'] ?? '') === 'Supervisor' ? 'selected' : '' ?>>Supervisor</option>
+                            <option value="Teamleader" <?= (session()->get('filterParams')['role'] ?? '') === 'Teamleader' ? 'selected' : '' ?>>Teamleader</option>
+                            <option value="Agent" <?= (session()->get('filterParams')['role'] ?? '') === 'Agent' ? 'selected' : '' ?>>Agent</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Apply Filter</button>
+                    <button type="submit" class="btn btn-primary" id="applyFilter">Apply Filter</button>
+                   
                 </form>
-
             </div>
         </div>
     </div>
 </div>
-
-
 
 <script>
     // Populate the modal with user data for editing

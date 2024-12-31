@@ -22,21 +22,31 @@ class CampaignController extends BaseController
 
         $data['campaigns'] = $this->user->paginate(10);
         $data['pager'] = $this->user->pager; // Add pagination links
+        
+        session()->remove('filterParams');
+        
         return view('campaigns/home', $data);
+
     }
 
     public function filter()
     {
-        // Handle filtering functionality
-        $filterParams = array();
-        $filterParams['id'] = $this->request->getPost('id');
-        $filterParams['campaign_name'] = $this->request->getPost('campaign_name');
-        $filterParams['description'] = $this->request->getPost('description');
+        $session = session();
+      
+        // Store filter parameters in session
+        $filterParams = [
+            'id' => $this->request->getPost('id'),
+            'campaign_name' => $this->request->getPost('campaign_name'),
+            'description' => $this->request->getPost('description'),
+            // 'dob' => $this->request->getPost('dob'),
+            // 'role' => $this->request->getPost('category'),
+        ];
         
-    
+        $session->set('filterParams', $filterParams);
+
         // Default to all users
         $query = $this->user;
-    
+
         if (!empty($filterParams)) {
             if ($filterParams['id']) {
                 $query = $query->where('id', $filterParams['id']);
@@ -44,16 +54,48 @@ class CampaignController extends BaseController
             if ($filterParams['campaign_name']) {
                 $query = $query->where('campaign_name', $filterParams['campaign_name']);
             }
-            
             if ($filterParams['description']) {
-                $query = $query->where('description', $filterParams['description']);
+                $query = $query->like('description', $filterParams['description']);
             }
+            
+            
         }
-    
+
         $data['campaigns'] = $query->paginate(10); // Apply pagination to the filtered results
         $data['pager'] = $this->user->pager; // Add pagination links
         return view('campaigns/home', $data);
     }
+
+
+    // public function filter()
+    // {
+    //     // Handle filtering functionality
+    //     $filterParams = array();
+    //     $filterParams['id'] = $this->request->getPost('id');
+    //     $filterParams['campaign_name'] = $this->request->getPost('campaign_name');
+    //     $filterParams['description'] = $this->request->getPost('description');
+        
+    
+    //     // Default to all users
+    //     $query = $this->user;
+    
+    //     if (!empty($filterParams)) {
+    //         if ($filterParams['id']) {
+    //             $query = $query->where('id', $filterParams['id']);
+    //         }
+    //         if ($filterParams['campaign_name']) {
+    //             $query = $query->where('campaign_name', $filterParams['campaign_name']);
+    //         }
+            
+    //         if ($filterParams['description']) {
+    //             $query = $query->where('description', $filterParams['description']);
+    //         }
+    //     }
+    
+    //     $data['campaigns'] = $query->paginate(10); // Apply pagination to the filtered results
+    //     $data['pager'] = $this->user->pager; // Add pagination links
+    //     return view('campaigns/home', $data);
+    // }
 
     public function addData()
     {

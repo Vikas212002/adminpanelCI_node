@@ -142,15 +142,15 @@
                     <?= csrf_field() ?>
                     <div class="mb-3">
                         <label for="id" class="form-label">ID</label>
-                        <input type="text" class="form-control" id="id" name="id" placeholder="Enter ID">
+                        <input type="text" class="form-control" id="id" name="id" value="<?= session()->get('filterParams')['id'] ?? '' ?>" placeholder="Enter ID">
                     </div>
                     <div class="mb-3">
                         <label for="campaignname" class="form-label">Campaign Name :</label>
-                        <input type="text" class="form-control" name="campaign_name" id="campaign_name" placeholder="Enter Campaign name">
+                        <input type="text" class="form-control" name="campaign_name" id="campaign_name" value="<?= session()->get('filterParams')['campaign_name'] ?? '' ?>" placeholder="Enter Campaign name">
                     </div>
                     <div class="mb-3">
                         <label for="description" class="form-label">Description :</label>
-                        <input type="text" class="form-control" name="description" id="description" placeholder="Description">
+                        <input type="text" class="form-control" name="description" id="description" value="<?= session()->get('filterParams')['description'] ?? '' ?>" placeholder="Description">
                     </div>
                     
                     <button type="submit" class="btn btn-primary">Apply Filter</button>

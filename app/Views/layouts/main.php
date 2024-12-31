@@ -48,14 +48,15 @@
 
    
 
-    <div class="container-fluid d-flex justify-content-center mt-2">
-        <div class="d-flex justify-content-between align-items-center" style="width: 65%;">
-            <a href="#" class="nav-link link-dark me-2"><img src="/assets/dashboard.png" class="" style="height: 25px; width: 25px;" alt=""> Dashboard</a>
-            <a href="#" class="nav-link link-dark me-2"><img src="/assets/live.png" class="" style="height: 25px; width: 25px;" alt="">Live</a>
-            <a href="#" class="nav-link link-dark me-2"><img src="/assets/reports.png" class="" style="height: 25px; width: 25px;" alt="">Reports</a>
-            <a href="#" class="nav-link link-dark me-2"><img src="/assets/conversations.png" class="" style="height: 25px; width: 25px;" alt="">Conversations</a>
-            <a href="#" class="nav-link link-dark me-2"><img src="/assets/contacts.png" class="" style="height: 25px; width: 25px;" alt="">Contacts</a>
-            <div class="dropdown">
+<div class="container-fluid mt-2">
+    <div class="d-flex flex-wrap justify-content-center align-items-center" style="width: 100%;">
+        <div class="d-flex flex-wrap justify-content-center align-items-center w-100">
+            <a href="#" class="nav-link link-dark mx-3"><img src="/assets/dashboard.png" style="height: 25px; width: 25px;" alt=""> Dashboard</a>
+            <a href="#" class="nav-link link-dark mx-3"><img src="/assets/live.png" style="height: 25px; width: 25px;" alt=""> Live</a>
+            <a href="#" class="nav-link link-dark mx-3"><img src="/assets/reports.png" style="height: 25px; width: 25px;" alt=""> Reports</a>
+            <a href="#" class="nav-link link-dark mx-3"><img src="/assets/conversations.png" style="height: 25px; width: 25px;" alt=""> Conversations</a>
+            <a href="#" class="nav-link link-dark mx-3"><img src="/assets/contacts.png" style="height: 25px; width: 25px;" alt=""> Contacts</a>
+            <div class="dropdown mx-3">
                 <button class="btn btn-link link-dark dropdown-toggle text-decoration-none" type="button" id="operationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <img src="/assets/operations.png" class="me-2" style="height: 25px; width: 25px;" alt=""> Operations
                 </button>
@@ -66,22 +67,18 @@
                     <li><a class="dropdown-item" href="/chat/index">Chat</a></li>
                 </ul>
             </div>
-            <a href="#" class="nav-link link-dark"><img src="/assets/advancedsettings.png" class="me-2" style="height: 25px; width: 25px;" alt="">Advanced settings</a>
-
-            <!-- Date Picker and Go Button -->
-
-            <div class="d-flex justify-content-between">
-
-                <input type="text" class="form-control me-2" id="date-range" placeholder="Select date range" readonly>
+            <a href="#" class="nav-link link-dark mx-2"><img src="/assets/advancedsettings.png" class="me-2" style="height: 25px; width: 25px;" alt=""> Advanced settings</a>
+            <div class="d-flex justify-content-center mt-2">
+                <input type="text" class="form-control mx-2" id="date-range" placeholder="Select date range" readonly>
                 <button class="btn btn-sm btn-outline-secondary" type="button" id="date-range-button">
                     <img src="/assets/calendar.png" style="height: 20px; width: 20px;" alt="">
                 </button>
-                <button id="go-button" class="btn btn-sm btn-primary ms-2">Go</button>
-           
+                <button id="go-button" class="btn btn-sm btn-primary mx-2">Go</button>
             </div>
-
         </div>
+        <!-- Date Picker and Go Button -->
     </div>
+</div>
 
 
 
