@@ -46,39 +46,54 @@
         </div>
     </nav>
 
-   
 
-<div class="container-fluid mt-2">
-    <div class="d-flex flex-wrap justify-content-center align-items-center" style="width: 100%;">
-        <div class="d-flex flex-wrap justify-content-center align-items-center w-100">
-            <a href="#" class="nav-link link-dark mx-3"><img src="/assets/dashboard.png" style="height: 25px; width: 25px;" alt=""> Dashboard</a>
-            <a href="#" class="nav-link link-dark mx-3"><img src="/assets/live.png" style="height: 25px; width: 25px;" alt=""> Live</a>
-            <a href="#" class="nav-link link-dark mx-3"><img src="/assets/reports.png" style="height: 25px; width: 25px;" alt=""> Reports</a>
-            <a href="#" class="nav-link link-dark mx-3"><img src="/assets/conversations.png" style="height: 25px; width: 25px;" alt=""> Conversations</a>
-            <a href="#" class="nav-link link-dark mx-3"><img src="/assets/contacts.png" style="height: 25px; width: 25px;" alt=""> Contacts</a>
-            <div class="dropdown mx-3">
-                <button class="btn btn-link link-dark dropdown-toggle text-decoration-none" type="button" id="operationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="/assets/operations.png" class="me-2" style="height: 25px; width: 25px;" alt=""> Operations
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="operationsDropdown">
-                    <li><a class="dropdown-item" href="/admin">Users</a></li>
-                    <li><a class="dropdown-item" href="#">Access Level</a></li>
-                    <li><a class="dropdown-item" href="/campaigns/home">Campaigns</a></li>
-                    <li><a class="dropdown-item" href="/chat/index">Chat</a></li>
-                </ul>
+
+    <div class="container-fluid mt-2">
+        <div class="d-flex flex-wrap justify-content-center align-items-center" style="width: 100%;">
+            <div class="d-flex flex-wrap justify-content-center align-items-center w-100">
+                <a href="#" class="nav-link link-dark mx-3"><img src="/assets/dashboard.png" style="height: 25px; width: 25px;" alt=""> Dashboard</a>
+                <a href="#" class="nav-link link-dark mx-3"><img src="/assets/live.png" style="height: 25px; width: 25px;" alt=""> Live</a>
+                <div class="dropdown mx-3">
+                    <button class="btn btn-link link-dark dropdown-toggle text-decoration-none" type="button" id="operationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="/assets/operations.png" class="me-2" style="height: 25px; width: 25px;" alt=""> Reports
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="operationsDropdown">
+                        <li><a class="dropdown-item" href="#" onclick="setFlag(2)">MongoDB Report</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setFlag(1)">MySQL Report</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="setFlag(3)">Elastic Search Report</a></li>
+                    </ul>
+                    <div style="display: none;">
+                        <form id="reportForm" method="post" action="<?= base_url('/reports') ?>">
+                            <input type="hidden" id="flag" name="flag" value="">
+                        </form>
+                    </div>
+
+                </div>
+                <a href="#" class="nav-link link-dark mx-3"><img src="/assets/conversations.png" style="height: 25px; width: 25px;" alt=""> Conversations</a>
+                <a href="#" class="nav-link link-dark mx-3"><img src="/assets/contacts.png" style="height: 25px; width: 25px;" alt=""> Contacts</a>
+                <div class="dropdown mx-3">
+                    <button class="btn btn-link link-dark dropdown-toggle text-decoration-none" type="button" id="operationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="/assets/operations.png" class="me-2" style="height: 25px; width: 25px;" alt=""> Operations
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="operationsDropdown">
+                        <li><a class="dropdown-item" href="/admin">Users</a></li>
+                        <li><a class="dropdown-item" href="#">Access Level</a></li>
+                        <li><a class="dropdown-item" href="/campaigns/home">Campaigns</a></li>
+                        <li><a class="dropdown-item" href="/chat/index">Chat</a></li>
+                    </ul>
+                </div>
+                <a href="#" class="nav-link link-dark mx-2"><img src="/assets/advancedsettings.png" class="me-2" style="height: 25px; width: 25px;" alt=""> Advanced settings</a>
+                <div class="d-flex justify-content-center mt-2">
+                    <input type="text" class="form-control mx-2" id="date-range" placeholder="Select date range" readonly>
+                    <button class="btn btn-sm btn-outline-secondary" type="button" id="date-range-button">
+                        <img src="/assets/calendar.png" style="height: 20px; width: 20px;" alt="">
+                    </button>
+                    <button id="go-button" class="btn btn-sm btn-primary mx-2">Go</button>
+                </div>
             </div>
-            <a href="#" class="nav-link link-dark mx-2"><img src="/assets/advancedsettings.png" class="me-2" style="height: 25px; width: 25px;" alt=""> Advanced settings</a>
-            <div class="d-flex justify-content-center mt-2">
-                <input type="text" class="form-control mx-2" id="date-range" placeholder="Select date range" readonly>
-                <button class="btn btn-sm btn-outline-secondary" type="button" id="date-range-button">
-                    <img src="/assets/calendar.png" style="height: 20px; width: 20px;" alt="">
-                </button>
-                <button id="go-button" class="btn btn-sm btn-primary mx-2">Go</button>
-            </div>
+            <!-- Date Picker and Go Button -->
         </div>
-        <!-- Date Picker and Go Button -->
     </div>
-</div>
 
 
 
@@ -111,3 +126,10 @@
 </body>
 
 </html>
+
+<script>
+    function setFlag(value) {
+        document.getElementById('flag').value = value;
+        document.forms[0].submit();
+    }
+</script>

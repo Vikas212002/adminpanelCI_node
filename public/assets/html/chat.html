@@ -194,7 +194,7 @@
 </section>
 <script src=" <?php echo base_url('assets/js/socket.js'); ?>"></script>
 <!-- <script src="/socket.io/socket.io.js"></script> -->
-<script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+<!-- <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script> -->
 <script>
 
   const socket = io("http://localhost:3000");
@@ -209,12 +209,14 @@
       input.value = '';
     }
     
-    socket.on('chat message', (msg) => {
-      const item = document.createElement('li');
-      item.textContent = msg;
-      messages.appendChild(item);
-      window.scrollTo(0, document.body.scrollHeight);
-    });
+  });
+
+  socket.on('chat message', (msg) => {
+    const item = document.createElement('li');
+    item.textContent = msg;
+    item.innerHTML = `<li class="repaly"><p>${msg}</p><span class="time"></span></li>`;
+    messages.appendChild(item);
+    window.scrollTo(0, document.body.scrollHeight);
   });
 
 </script>

@@ -131,7 +131,7 @@
                                 </div>
                                 <div class="form-group mb-2">
                                     <label>DOB :</label>
-                                    <input type="text" class="form-control" name="dob" id="editDob" placeholder="DD/MM/YYYY" required>
+                                    <input type="date" class="form-control" name="dob" id="editDob" value="" placeholder="DD/MM/YYYY" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="role">Role :</label>
