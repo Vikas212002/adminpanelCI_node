@@ -31,7 +31,9 @@
                 if($repnum == 1){?>
                   <?= $report['hour'] ?>
                 <?php }elseif($repnum == 2){
-              ?> <?= $report['date'] ?> <?php } ?>
+              ?> <?= $report['hour'] ?> <?php }else {
+                ?> <?= $report['hour'] ?> <?php } ?>
+              
             </td>
             <td><?= $report['totalCalls'] ?></td>
             <td><?= $report['totalHoldTime'] ?></td>

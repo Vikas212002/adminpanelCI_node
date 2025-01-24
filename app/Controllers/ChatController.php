@@ -2,18 +2,23 @@
 
 namespace App\Controllers;
 
+use App\Models\RegisterModel;
 
 class ChatController extends BaseController
 {
-public function index()
+    protected $userc;
+
+    public function index()
     {
         $session = session();
         if (!$session->get('isLoggedIn')) {
             return redirect()->to('/login');
         }
 
-        // $data['campaigns'] = $this->user->paginate(10);
-        // $data['pager'] = $this->user->pager; // Add pagination links
-        return view('chat/index');
+        $this->userc = new RegisterModel();
+        $data = $this->userc->findAll();
+
+        return view('chat/index', ['data' => $data]);
     }
+    
 }

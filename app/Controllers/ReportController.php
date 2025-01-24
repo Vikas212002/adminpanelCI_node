@@ -133,108 +133,76 @@ class ReportController extends BaseController
         fclose($file);
         exit;
     }
+
+    public function filter()
+{
+    $flag = $this->request->getVar('flag');
+    $database = $this->request->getVar('database');
+    $currentPage = $this->request->getVar('page') ?? 1;
+
+    $session = \Config\Services::session();
+
+    $filteredData = [
+        'agent_name' => $this->request->getVar('agent_name'),
+        'campaign_name' => $this->request->getVar('campaign_name'),
+        'process_name' => $this->request->getVar('process_name'),
+        'filter_date' => $this->request->getVar('filter_date')
+    ];
+
+    $session->set('filteredData', $filteredData);
+    switch ($database) {
+        case 'Mysql':
+            $url = "http://localhost:4000/mysql/filter";
+            break;
+        case 'MongoDB':
+            $url = "http://localhost:4000/mongo/filter";
+            break;
+        case 'ElasticSearch':
+            $url = "http://localhost:4000/elastic/filter";
+            break;
+        default:
+            echo "Invalid database selection";
+            return; 
+    }
+
+    // Set cURL options
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($filteredData));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Content-Type: application/x-www-form-urlencoded'
+    ]);
+
+    // Execute cURL request
+    $response = curl_exec($ch);
+
+    // Check for cURL errors
+    if (curl_errno($ch)) {
+        $error_msg = curl_error($ch);
+        curl_close($ch);
+        return "cURL Error: " . $error_msg;
+    }
+
+    // Close cURL session
+    curl_close($ch);
+
+    // Decode the JSON response
+    $data['reports'] = json_decode($response, true);
+
+    // Debug: Log the response data
+    log_message('debug', 'Response Data: ' . print_r($data['reports'], true));
+
+    // Paginate the data
+    $pager = \Config\Services::pager();
+    $perPage = 10; 
+    $totalItems = count($data['reports']);
+    $data['reports'] = array_slice($data['reports'], ($currentPage - 1) * $perPage, $perPage);
+    $data['pager'] = $pager->makeLinks($currentPage, $perPage, $totalItems);
+    $data['repnum'] = $flag;
+
+    return view('reports/CDR_report', $data);
+}
     
-    public function hourlyreportMongo()
-    {
-        // Initialize cURL
-        $ch = curl_init();
-
-        $url = "http://localhost:4000/mongo/getsummary/hourlyreport"; // Updated URL
-
-        // Set cURL options
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // Execute cURL request
-        $response = curl_exec($ch);
-
-        // Check for cURL errors
-        if (curl_errno($ch)) {
-            $error_msg = curl_error($ch);
-            curl_close($ch);
-            return "cURL Error: " . $error_msg;
-        }
-
-        // Close cURL session
-        curl_close($ch);
-
-        // Decode the JSON response
-        $data['reports'] = json_decode($response, true)['hourlyReport'];
-        // Debug: Log the response data
-        log_message('debug', 'Response Data: ' . print_r($data['reports'], true));
-
-        // Paginate the data
-        $pager = \Config\Services::pager();
-        $perPage = 10; // Number of items per page
-        $currentPage = $this->request->getVar('page') ?? 1;
-        $totalItems = count($data['reports']);
-        $data['reports'] = array_slice($data['reports'], ($currentPage - 1) * $perPage, $perPage);
-        $data['pager'] = $pager->makeLinks($currentPage, $perPage, $totalItems);
-
-        return view('reports/mongosummary', $data); // Pass data to the view
-    }
-
-    public function hourlyreportMongoCsv()
-    {
-        $ch = curl_init();
-        $url = "http://localhost:4000/mongo/getsummary/hourlyreport"; // Updated URL with pagination
-        // Set cURL options
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // Execute cURL request
-        $response = curl_exec($ch);
-
-        // Check for cURL errors
-        if (curl_errno($ch)) {
-            $error_msg = curl_error($ch);
-            curl_close($ch);
-            return "cURL Error: " . $error_msg;
-        }
-
-        // Close cURL session
-        curl_close($ch);
-
-        // Decode JSON response
-        $responseData = json_decode($response, true);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            return "JSON Error: " . json_last_error_msg();
-        }
-
-        $data = $responseData['hourlyReport'];
-        // print_r($data); die;
-        // Define headers
-        $headers = array('hour', 'totalCalls', 'totalHoldTime', 'totalTalkTime', 'totalDisposeTime', 'totalDuration', 'totalMuteTime', 'totalConferenceTime', 'totalProcesses', 'totalCampaigns',);
-
-        // Create CSV file
-        $filename = 'Summary_Report_mongo' . date('Ymd') . '.csv';
-        header("Content-Description: File Transfer");
-        header("Content-Disposition: attachment; filename=$filename");
-        header("Content-Type: application/csv; ");
-
-        $file = fopen('php://output', 'w');
-        if (!$file) {
-            return "Error opening file for writing";
-        }
-
-        // Write headers to CSV file
-        fputcsv($file, $headers);
-
-        // Write data to CSV file
-        foreach ($data as $row) {
-            // Ensure row data matches headers
-            $rowData = array();
-            foreach ($headers as $header) {
-                if ($header == 'hour') {
-                    $rowData[] = $row['date']['hour'];
-                } else {
-                    $rowData[] = $row[$header] ?? '';
-                }
-            }
-            fputcsv($file, $rowData);
-        }
-
-        fclose($file);
-        exit;
-    }
 }

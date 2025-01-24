@@ -16,7 +16,7 @@ class SummaryController extends BaseController
         } elseif ($flag == 2) {
             $url = "http://localhost:4000/mongo/getsummary/hourlyreport"; // Updated URL
         } elseif ($flag == 3) {
-            $url = "http://localhost:4000/elastic/hourlyreport"; // Updated URL
+            $url = "http://localhost:4000/elastic/getsummary/hourlyreport"; // Updated URL
         } else {
             echo 'Data Not Found'; // Default URL or handle error
         }
@@ -72,7 +72,7 @@ class SummaryController extends BaseController
                 $filename = 'Summary_Report_mongo' . date('Ymd') . '.csv';
                 break;
             case 3:
-                $url = "http://localhost:4000/elastic/hourlyreport";
+                $url = "http://localhost:4000/elastic/getsummary/hourlyreport";
                 $filename = 'Summary_Report_elastic' . date('Ymd') . '.csv';
                 break;
             default:
@@ -100,8 +100,8 @@ class SummaryController extends BaseController
     
         $data = $responseData ?? [];
         $headers = [
-            'hour', 'totalCalls', 'totalHoldTime', 'totalTalkTime', 'totalDisposeTime', 'totalDuration', 'totalMuteTime', 'totalConferenceTime', 'totalProcesses', 'totalCampaigns'
-        ];
+            'hour' ,'totalCalls', 'totalHoldTime', 'totalTalkTime', 'totalDisposeTime', 'totalDuration', 'totalMuteTime', 'totalConferenceTime', 'totalProcesses', 'totalCampaigns'
+       ];
     
         header("Content-Description: File Transfer");
         header("Content-Disposition: attachment; filename=\"$filename\"");

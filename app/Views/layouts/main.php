@@ -40,7 +40,8 @@
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
         <div class="container-fluid">
             <img src="/assets/slashrtclogo.png" class="me-2" style="height: 25px; width: 25px;" alt="">
-            <div class="ms-auto">
+            <div class="d-flex align-items-end justify-content-between gap-4">
+                <h4>Welcome! <?= session()->get('name'); ?></h4>
                 <a href="/logout" class="btn btn-info">Logout</a>
             </div>
         </div>
@@ -63,7 +64,7 @@
                         <li><a class="dropdown-item" href="#" onclick="setFlag(3)">Elastic Search Report</a></li>
                     </ul>
                     <div style="display: none;">
-                        <form id="reportForm" method="post" action="<?= base_url('/reports') ?>">
+                        <form id="reportForm" method="get" action="<?= base_url('/reports') ?>">
                             <input type="hidden" id="flag" name="flag" value="">
                         </form>
                     </div>

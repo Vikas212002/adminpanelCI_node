@@ -12,9 +12,7 @@ class AdminModel extends Model{
         'name',
         'phone',
         'dob',
-        'role',
-
-        
+        'role', 
     ];
 
 }

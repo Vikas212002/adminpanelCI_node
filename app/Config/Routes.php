@@ -15,8 +15,9 @@ $routes->get('/admin/add', 'AdminController::add'); // New route for displaying 
 $routes->post('/admin/store', 'AdminController::addData'); // Updated route for storing the user
 
 $routes->get('/login', 'LoginController::index');
-$routes->post('/login/authenticate', 'LoginController::authenticate');
+$routes->POST('/login/authenticate', 'LoginController::authenticate');
 $routes->get('/logout', 'LoginController::logout');
+$routes->POST('/register', 'LoginController::register'); 
 
 
 $routes->get('/campaigns/home', 'CampaignController::index'); 
@@ -30,23 +31,11 @@ $routes->post('/admin/filter', 'AdminController::filter');
 $routes->post('/campaign/filter', 'CampaignController::filter');
 
 $routes->get('/chat/index', 'ChatController::index'); 
+$routes->post('/chat/send', 'ChatController::sendMessage');
 
-$routes->post('/reports', 'ReportController::index');
+$routes->get('/reports', 'ReportController::index');
 $routes->get('/download/CDR', 'ReportController::downloadCDRCsv');
 $routes->get('/summary_reports', 'SummaryController::index');
 $routes->get('/download/summary_report', 'SummaryController::downloadSummaryCsv');
-$routes->get('/mongo/summary', 'MongoDBReportController::hourlyreportMongo');
-$routes->get('/mongo/summary/download', 'MongoDBReportController::hourlyreportMongoCsv');
 
-$routes->get('/mysqlreport', 'MySqlReportController::index');
-$routes->get('/download/mysql', 'MySqlReportController::downloadCsv');
-$routes->get('/mysql/summary', 'MySqlReportController::hourlyreport');
-$routes->get('/mysql/summary/download', 'MySqlReportController::hourlyreportCsv');
-
-$routes->get('/elasticreport', 'ElasticReportController::index');
-$routes->get('/download/elastic', 'ElasticReportController::downloadCsv');
-
-
-
-
-
+$routes->get('/reports/filter', 'ReportController::filter');
