@@ -2,40 +2,43 @@ const chatList = document.querySelectorAll('.chat-list a');
 const chatBox = document.querySelector('.chatbox');
 const chatIcon = document.querySelector('.chat-icon');
 
-chatList.forEach(function(chat) {
-    chat.addEventListener("click", function() {
-        chatBox.classList.add('showbox');
+if (chatList) {
+    chatList.forEach(chat => {
+        chat.addEventListener("click", () => {
+            chatBox.classList.add('showbox');
+        });
+    });
+}
+
+if (chatIcon) {
+    chatIcon.addEventListener('click', (event) => {
+        chatBox.classList.remove('showbox');
+    });
+}
+
+document.querySelectorAll('.chatUsers').forEach(user => {
+    user.addEventListener('click', () => {
+        const receiver = user.getAttribute("data-username");
+        const userId = user.getAttribute("data-user-id");
+
+        document.getElementById('receiver').innerText = receiver;
+        messages.innerHTML = '';
+        const roomId = [sender, receiver].sort().join('_');
+        socket.emit('joinRoom', { sender, receiver, roomId });
     });
 });
 
-chatIcon.addEventListener('click', function (event) {
-  chatBox.classList.remove('showbox');
+document.addEventListener('DOMContentLoaded', () => {
+    const chatUsers = document.querySelectorAll('.chatUsers');
+    if (chatUsers.length > 0) {
+        const firstUser = chatUsers[0];
+        const receiver = firstUser.getAttribute("data-username");
+        document.getElementById('receiver').innerText = receiver;
+        const roomId = [sender, receiver].sort().join('_');
+        socket.emit('joinRoom', { sender, receiver, roomId });
+    }
 });
 
+// Socket.IO logic
 
-document.querySelectorAll('.chatUsers').forEach(user => {
-  user.addEventListener('click', () => {
-    
-      const receiver = user.getAttribute("data-username");
-      const userId = user.getAttribute("data-user-id");
-      const sender = "<?php echo $this->session->data('name'); ?>";
-      document.getElementById('receiver').innerHTML = receiver;
-      messages.innerHTML = '';
-      socket.emit('joinRoom', {
-          sender,
-          receiver
-      });
-  });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-  const chatUsers = document.querySelectorAll('.chatUsers');
-  if (chatUsers.length > 0) {
-      // Automatically open the first chat
-      const firstUser = chatUsers[0];
-      const receiver = firstUser.getAttribute("data-username");
-      const userId = firstUser.getAttribute("data-user-id");
-      document.getElementById('receiver').innerHTML = receiver;
-  }
-});
 
